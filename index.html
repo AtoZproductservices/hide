@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Gallery</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+
+        .gallery {
+            display: grid;
+            gap: 15px;
+            padding: 0;
+            list-style: none;
+        }
+
+        .gallery-item {
+            cursor: pointer;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gallery-item img {
+            display: block;
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Responsive Grid Layout */
+        @media (max-width: 599px) {
+            .gallery {
+                grid-template-columns: 1fr; /* Single column on small screens */
+            }
+        }
+
+        @media (min-width: 600px) and (max-width: 899px) {
+            .gallery {
+                grid-template-columns: repeat(2, 1fr); /* 2 columns on medium screens */
+            }
+        }
+
+        @media (min-width: 900px) and (max-width: 1199px) {
+            .gallery {
+                grid-template-columns: repeat(3, 1fr); /* 3 columns on larger screens */
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .gallery {
+                grid-template-columns: repeat(4, 1fr); /* 4 columns on extra large screens */
+            }
+        }
+
+        /* Fullscreen Modal */
+        .fullscreen-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s, opacity 0.3s ease;
+        }
+
+        .fullscreen-modal.visible {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .fullscreen-modal img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 40px;
+            color: #fff;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <ul id="gallery-container" class="gallery">
+        </ul>
+
+    <div id="fullscreen-modal" class="fullscreen-modal">
+        <span class="close-btn">&times;</span>
+        <img id="fullscreen-image" src="" alt="Full screen image">
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const galleryContainer = document.getElementById('gallery-container');
+            const fullscreenModal = document.getElementById('fullscreen-modal');
+            const fullscreenImage = document.getElementById('fullscreen-image');
+            const closeBtn = document.querySelector('.close-btn');
+
+            // Fetch data from the specified URL
+            fetch('https://raw.githubusercontent.com/AtoZproductservices/hide/main/data.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const dataUrls = data.map(item => item.dataUrl);
+                    if (dataUrls && dataUrls.length > 0) {
+                        dataUrls.forEach(url => {
+                            const listItem = document.createElement('li');
+                            listItem.className = 'gallery-item';
+                            const img = document.createElement('img');
+                            img.src = url;
+                            img.alt = 'Gallery image';
+                            listItem.appendChild(img);
+
+                            // Add click event listener to each image
+                            listItem.addEventListener('click', () => {
+                                fullscreenImage.src = url;
+                                fullscreenModal.classList.add('visible');
+                                
+                                // Redirect after displaying the full-screen image
+                                setTimeout(() => {
+                                    window.open('https://www.revenuecpmgate.com/ibhwtzuijy?key=d500165318a9a5dd51c216787ebc210a', '_blank');
+                                }, 500); // Small delay to allow the modal to be seen
+                            });
+
+                            galleryContainer.appendChild(listItem);
+                        });
+                    } else {
+                        galleryContainer.innerHTML = '<p>No images found.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching or processing data:', error);
+                    galleryContainer.innerHTML = '<p>Failed to load images. Please try again later.</p>';
+                });
+
+            // Close the full-screen modal
+            closeBtn.addEventListener('click', () => {
+                fullscreenModal.classList.remove('visible');
+            });
+
+            // Close modal on click outside the image
+            fullscreenModal.addEventListener('click', (event) => {
+                if (event.target === fullscreenModal) {
+                    fullscreenModal.classList.remove('visible');
+                }
+            });
+        });
+
+      window.open('https://www.revenuecpmgate.com/ibhwtzuijy?key=d500165318a9a5dd51c216787ebc210a', '_blank');
+    </script>
+</body>
+</html>
